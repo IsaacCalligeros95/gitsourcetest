@@ -1,19 +1,30 @@
-step "run-a-script" {
-    name = "Run a Script"
-
+step "run-terraform-migrations" {
+    name = "Run Terraform Migrations"
     action {
         action_type = "Octopus.Script"
         properties = {
-            Octopus.Action.Script.ScriptBody = "Write-Host \"Hello-yo\"  "
-            Octopus.Action.Script.ScriptSource = "Inline"
-            Octopus.Action.Script.Syntax = "PowerShell"
-            OctopusUseBundledTooling = "False"
+            Octopus.Action.EnabledFeatures = "Octopus.Features.SubstituteInFiles"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "octopus-server-built-in"
+            Octopus.Action.Package.PackageId = "CloudPortal.Infrastructure"
+            Octopus.Action.Script.ScriptFileName = "cloudplatform/migrate.sh"
+            Octopus.Action.Script.ScriptSource = "Package"
+            Octopus.Action.SubstituteInFiles.TargetFiles = "cloudplatform/*.tfvars"
         }
-        worker_pool = "test-pool"
+        worker_pool = "hosted-ubuntu"
 
         container {
-            feed = "docker-feed"
-            image = "octopusdeploy/worker-tools:6.1.1-ubuntu.22.04"
+            feed = "docker-hub"
+            image = "octopuslabs/terraform-workertools:1.6.4-ubuntu.2204"
+        }
+
+        packages {
+            acquisition_location = "Server"
+            feed = "octopus-server-built-in"
+            package_id = "CloudPortal.Infrastructure"
+            properties = {
+                SelectionMode = "immediate"
+            }
         }
     }
 }
