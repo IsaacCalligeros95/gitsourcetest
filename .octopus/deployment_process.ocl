@@ -1,5 +1,6 @@
 step "run-terraform-migrations" {
     name = "Run Terraform Migrations"
+
     action {
         action_type = "Octopus.Script"
         properties = {
@@ -8,6 +9,7 @@ step "run-terraform-migrations" {
             Octopus.Action.Package.FeedId = "octopus-server-built-in"
             Octopus.Action.Package.PackageId = "config"
             Octopus.Action.Script.ScriptFileName = "cloudplatform/migrate.sh"
+            Octopus.Action.Script.ScriptParameters = "f"
             Octopus.Action.Script.ScriptSource = "Package"
             Octopus.Action.SubstituteInFiles.TargetFiles = "cloudplatform/*.tfvars"
         }
