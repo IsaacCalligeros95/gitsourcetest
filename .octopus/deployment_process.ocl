@@ -1,8 +1,5 @@
 step "run-a-script" {
     name = "Run a Script"
-    properties = {
-        Octopus.Action.TargetRoles = "test"
-    }
 
     action {
         action_type = "Octopus.Script"
@@ -10,6 +7,13 @@ step "run-a-script" {
             Octopus.Action.Script.ScriptBody = "Write-Host \"Hello-yo\"  "
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "test-pool"
+
+        container {
+            feed = "docker-feed"
+            image = "octopusdeploy/worker-tools:6.1.1-ubuntu.22.04"
         }
     }
 }
