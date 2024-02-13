@@ -11,7 +11,7 @@ step "run-terraform-migrations" {
             Octopus.Action.Script.ScriptSource = "Package"
             Octopus.Action.SubstituteInFiles.TargetFiles = "cloudplatform/*.tfvars"
         }
-        worker_pool = "hosted-ubuntu"
+        worker_pool = "test-pool"
 
         container {
             feed = "docker-feed"
